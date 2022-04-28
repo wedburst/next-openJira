@@ -25,7 +25,6 @@ export const EntryCard: FC<Props> = ({ entry }) => {
   };
   
   const onDragEnd = (event: DragEvent) => {
-    console.log(event);
     endDragging();
   }
 
