@@ -5,7 +5,6 @@ export interface UIState {
   sidemenuOpen: boolean;
   isAddingEntry: boolean;
   isDragging: boolean;
-  children?: any;
 }
 
 const UI_INITIAL_STATE: UIState = {
@@ -14,7 +13,7 @@ const UI_INITIAL_STATE: UIState = {
   isDragging: false,
 };
 
-export const UIProvider: FC<UIState> = ({ children }) => {
+export const UIProvider= ({ children }: any) => {
   const [state, dispath] = useReducer(uiReducer, UI_INITIAL_STATE);
 
   const openSideMenu = () => dispath({ type: "UI - Open Sidebar" });
