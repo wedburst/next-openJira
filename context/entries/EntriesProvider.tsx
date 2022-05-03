@@ -10,26 +10,7 @@ export interface EntriesState {
 }
 
 const UI_INITIALSTATE: EntriesState = {
-  entries: [
-    {
-      _id: uuidv4(),
-      description: "Pendiente: lorem10",
-      status: "pending",
-      createdAt: Date.now(),
-    },
-    {
-      _id: uuidv4(),
-      description: "En-Progreso lorem10",
-      status: "in-progress",
-      createdAt: Date.now(),
-    },
-    {
-      _id: uuidv4(),
-      description: "Terminadas: lorem10",
-      status: "finished",
-      createdAt: Date.now(),
-    },
-  ],
+  entries: [],
 };
 
 export const EntriesProvider = ({ children }:any) => {
