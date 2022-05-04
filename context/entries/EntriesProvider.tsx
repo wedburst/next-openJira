@@ -29,8 +29,13 @@ export const EntriesProvider = ({ children }:any) => {
     dispath({ type: "[Entry] - Add-Entry", payload: data });
   };
 
-  const updateEntry = (entry: Entry) => {
-    dispath({ type: "[Entry] - Update-Entry", payload: entry });
+  const updateEntry = async({_id, description, status}: Entry) => {
+    try {
+      const { data } = await entriesApi.put<Entry>(`/entries/${_id}`, {description, status});
+      dispath({ type: "[Entry] - Update-Entry", payload: data });
+    } catch (error) {
+      console.log({error});
+    }
   };
 
   const refreshEntries = async() => {
