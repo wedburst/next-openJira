@@ -23,10 +23,42 @@ export default function handler(
     case "GET":
       return getEntry(req, res);
 
+    case "DELETE":
+      return deleteEntry(req, res);
+
     default:
       return res.status(400).json({ message: "Endpoint no existe" });
   }
 }
+
+const deleteEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const { id } = req.query;
+  await db.connect();
+
+  const entryInDB = await Entry.findById(id);
+  
+  if (!entryInDB) {
+    await db.disconnect();
+    return res
+      .status(400)
+      .json({ message: "No hay entradas con este ID: " + id });
+  }
+
+  try {
+    const deleteEntry = await Entry.deleteOne(
+      { _id: id }
+    );
+    await db.disconnect();
+  } catch (error) {
+    await db.disconnect();
+    console.log({ error });
+    res
+      .status(400)
+      .json({ message: "Error al actualizar entrada, BAD REQUEST" });
+  }
+
+  return res.status(200).json(entryInDB);
+};
 
 const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { id } = req.query;
@@ -57,16 +89,16 @@ const updateEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(200).json(updatedEntry!);
   } catch (error) {
     await db.disconnect();
-    console.log({error});
-    res.status(400).json({ message: "Error al actualizar entrada, BAD REQUEST" });
+    console.log({ error });
+    res
+      .status(400)
+      .json({ message: "Error al actualizar entrada, BAD REQUEST" });
   }
 
   // entryToUpdate.description = description;
   // entryToUpdate.status = status;
   // await entryToUpdate.save();
-
 };
-
 
 const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { id } = req.query;
@@ -82,4 +114,4 @@ const getEntry = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   return res.status(200).json(entryInDB);
-}
+};
